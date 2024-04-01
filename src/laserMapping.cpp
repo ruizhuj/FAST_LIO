@@ -514,8 +514,6 @@ void publish_frame_world(const ros::Publisher & pubLaserCloudFull)
         
         ros::Time current_time = ros::Time::now(); 
         
-        /*double timestamp_head = msg->header.stamp.toSec();
-        **/
         if (pcl_wait_save->size() > 0 && pcd_save_interval > 0  && scan_wait_num >= pcd_save_interval)
         {
             pcd_index ++;
@@ -1022,12 +1020,6 @@ int main(int argc, char** argv)
     
     if (pcl_wait_save->size() > 0 && pcd_save_en)
     {
-        /*string file_name = string("scans.pcd"); + timestamp_str
-        string timestamp_str = std::;
-         "scans_" + string("_test.pcd");
-         double timestamp_head = msg->header.stamp.toSec();
-         string timestamp_now = std::to_string(current_time.sec);
-        string file_name = string("scans_test.pcd");*/
         ros::Time current_time = ros::Time::now();        
         string file_name = string("scans_") + to_string(current_time.sec) + string(".pcd");        
         string all_points_dir(string(string(ROOT_DIR) + "PCD/") + file_name);
