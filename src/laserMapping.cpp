@@ -511,10 +511,15 @@ void publish_frame_world(const ros::Publisher & pubLaserCloudFull)
 
         static int scan_wait_num = 0;
         scan_wait_num ++;
+        
+        ros::Time current_time = ros::Time::now(); 
+        
+        /*double timestamp_head = msg->header.stamp.toSec();
+        **/
         if (pcl_wait_save->size() > 0 && pcd_save_interval > 0  && scan_wait_num >= pcd_save_interval)
         {
             pcd_index ++;
-            string all_points_dir(string(string(ROOT_DIR) + "PCD/scans_") + to_string(pcd_index) + string(".pcd"));
+            string all_points_dir(string(string(ROOT_DIR) + "PCD/scans_") + to_string(pcd_index) + string("_") + to_string(current_time.sec) + string(".pcd"));
             pcl::PCDWriter pcd_writer;
             cout << "current scan saved to /PCD/" << all_points_dir << endl;
             pcd_writer.writeBinary(all_points_dir, *pcl_wait_save);
@@ -523,7 +528,7 @@ void publish_frame_world(const ros::Publisher & pubLaserCloudFull)
         }
     }
 }
-
+        
 void publish_frame_body(const ros::Publisher & pubLaserCloudFull_body)
 {
     int size = feats_undistort->points.size();
@@ -1014,9 +1019,17 @@ int main(int argc, char** argv)
     /**************** save map ****************/
     /* 1. make sure you have enough memories
     /* 2. pcd save will largely influence the real-time performences **/
+    
     if (pcl_wait_save->size() > 0 && pcd_save_en)
     {
-        string file_name = string("scans.pcd");
+        /*string file_name = string("scans.pcd"); + timestamp_str
+        string timestamp_str = std::;
+         "scans_" + string("_test.pcd");
+         double timestamp_head = msg->header.stamp.toSec();
+         string timestamp_now = std::to_string(current_time.sec);
+        string file_name = string("scans_test.pcd");*/
+        ros::Time current_time = ros::Time::now();        
+        string file_name = string("scans_") + to_string(current_time.sec) + string(".pcd");        
         string all_points_dir(string(string(ROOT_DIR) + "PCD/") + file_name);
         pcl::PCDWriter pcd_writer;
         cout << "current scan saved to /PCD/" << file_name<<endl;
